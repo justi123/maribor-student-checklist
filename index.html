@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Maribor Student 3-Day Checklist</title>
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --card:#121a27;
+      --muted:#93a4c7;
+      --text:#eaf1ff;
+      --accent:#4da3ff;
+      --good:#28d17c;
+      --warn:#ffcc66;
+      --border:rgba(255,255,255,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(77,163,255,0.18), transparent 60%),
+                  radial-gradient(1000px 600px at 80% 10%, rgba(40,209,124,0.14), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:28px 16px 50px;
+    }
+    header{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      padding:18px 18px;
+      border:1px solid var(--border);
+      background:rgba(18,26,39,0.82);
+      border-radius:16px;
+      backdrop-filter: blur(10px);
+    }
+    .title h1{
+      margin:0;
+      font-size:22px;
+      letter-spacing:.2px;
+    }
+    .title p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.4;
+    }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      user-select:none;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap:16px;
+      margin-top:16px;
+    }
+    @media(max-width: 900px){
+      .grid{grid-template-columns: 1fr;}
+    }
+    .card{
+      border:1px solid var(--border);
+      background:rgba(18,26,39,0.86);
+      border-radius:16px;
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+    }
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .days{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    .day{
+      padding:14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.03);
+    }
+    .day-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .badge{
+      font-size:12px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      color:var(--muted);
+    }
+    .badge.good{ color: var(--good); border-color: rgba(40,209,124,0.35); }
+    .badge.warn{ color: var(--warn); border-color: rgba(255,204,102,0.35); }
+    ul{
+      margin:0;
+      padding-left:18px;
+    }
+    li{
+      margin:7px 0;
+      line-height:1.4;
+      font-size:14px;
+    }
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    a.btn{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      text-decoration:none;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      font-size:13px;
+      transition: transform .08s ease, background .15s ease;
+    }
+    a.btn:hover{
+      transform: translateY(-1px);
+      background:rgba(77,163,255,0.12);
+      border-color: rgba(77,163,255,0.25);
+    }
+    .small{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:10px;
+    }
+    .checklist{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    .item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 10px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:rgba(255,255,255,0.03);
+    }
+    input[type="checkbox"]{
+      margin-top:3px;
+      width:18px;height:18px;
+      accent-color: var(--accent);
+    }
+    .item b{
+      display:block;
+      font-size:14px;
+      margin-bottom:3px;
+    }
+    .item span{
+      display:block;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.35;
+    }
+    footer{
+      margin-top:16px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      opacity:0.9;
+    }
+    .top-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button.action{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:13px;
+    }
+    button.action:hover{
+      background:rgba(255,255,255,0.06);
+    }
+    code{
+      background:rgba(255,255,255,0.06);
+      padding:3px 7px;
+      border-radius:8px;
+      border:1px solid var(--border);
+      font-size:12.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="title">
+        <h1>🇸🇮 Maribor Student 3-Day Checklist (with BONI Day 1)</h1>
+        <p>
+          Starting Address: <b>Mladinska ulica 7, 2000 Maribor</b><br/>
+          Goal: finish important legal steps smoothly without rush ✅
+        </p>
+      </div>
+
+      <div class="top-actions">
+        <span class="pill">🚶 Walking routes included</span>
+        <button class="action" onclick="window.print()">🖨️ Print</button>
+        <button class="action" onclick="resetChecks()">♻️ Reset Checklist</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- LEFT -->
+      <section class="card">
+        <h2>✅ 3-Day Plan (Realistic Order)</h2>
+        <p class="muted">
+          Tip: You can activate <b>BONI on Day 1</b> only <b>after</b> you receive your
+          <b>Enrollment Certificate (Potrdilo o vpisu)</b>.
+        </p>
+
+        <div class="days">
+          <!-- DAY 1 -->
+          <div class="day">
+            <div class="day-head">
+              <div>
+                <b style="font-size:15px;">DAY 1</b>
+                <div class="muted">Address registration + University + BONI</div>
+              </div>
+              <span class="badge warn">Most important (legal)</span>
+            </div>
+
+            <ul>
+              <li><b>1) Address Registration</b> – <code>Upravna Enota Maribor (Tujci)</code></li>
+              <li><b>2) University Enrollment</b> – <code>University of Maribor (International Office)</code></li>
+              <li><b>3) BONI Activation</b> – <code>ŠOUM Maribor</code> (student meal coupons)</li>
+            </ul>
+
+            <div class="row">
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Mladinska%20ulica%207%2C%202000%20Maribor&destination=Upravna%20Enota%20Maribor%2C%20Ulica%20heroja%20Staneta%201%2C%202000%20Maribor&travelmode=walking">
+                 📍 Home → Upravna Enota (Walk)
+              </a>
+
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Upravna%20Enota%20Maribor%2C%20Ulica%20heroja%20Staneta%201%2C%202000%20Maribor&destination=University%20of%20Maribor%2C%20Slom%C5%A1kov%20trg%2015%2C%202000%20Maribor&travelmode=walking">
+                 🎓 Upravna Enota → University (Walk)
+              </a>
+
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=University%20of%20Maribor%2C%20Slom%C5%A1kov%20trg%2015%2C%202000%20Maribor&destination=%C5%A0OUM%2C%20Maribor&travelmode=walking">
+                 🍽️ University → ŠOUM (BONI) (Walk)
+              </a>
+            </div>
+          </div>
+
+          <!-- DAY 2 -->
+          <div class="day">
+            <div class="day-head">
+              <div>
+                <b style="font-size:15px;">DAY 2</b>
+                <div class="muted">Residence permit submission + biometrics</div>
+              </div>
+              <span class="badge good">Main permit step</span>
+            </div>
+
+            <ul>
+              <li><b>4) Residence Permit + Biometrics</b> – <code>Upravna Enota Maribor</code></li>
+              <li>Carry: Address registration + Enrollment certificate + Insurance + Proof of funds</li>
+            </ul>
+
+            <div class="row">
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Mladinska%20ulica%207%2C%202000%20Maribor&destination=Upravna%20Enota%20Maribor%2C%20Ulica%20heroja%20Staneta%201%2C%202000%20Maribor&travelmode=walking">
+                 🪪 Home → Upravna Enota (Walk)
+              </a>
+            </div>
+          </div>
+
+          <!-- DAY 3 -->
+          <div class="day">
+            <div class="day-head">
+              <div>
+                <b style="font-size:15px;">DAY 3</b>
+                <div class="muted">Tax number + insurance + optional bank/work</div>
+              </div>
+              <span class="badge">Support steps</span>
+            </div>
+
+            <ul>
+              <li><b>5) Tax Number (Davčna številka)</b> – <code>FURS Maribor</code></li>
+              <li><b>6) Health Insurance</b> – <code>ZZZS Maribor</code></li>
+              <li><b>Optional:</b> Bank account + Student Work registration</li>
+            </ul>
+
+            <div class="row">
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Mladinska%20ulica%207%2C%202000%20Maribor&destination=Finan%C4%8Dna%20uprava%20RS%20(FURS)%2C%20Titova%20cesta%2010%2C%202000%20Maribor&travelmode=walking">
+                 🧾 Home → FURS (Walk)
+              </a>
+
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=Finan%C4%8Dna%20uprava%20RS%20(FURS)%2C%20Titova%20cesta%2010%2C%202000%20Maribor&destination=ZZZS%20Maribor%2C%20Ulica%20Talcev%209%2C%202000%20Maribor&travelmode=walking">
+                 🏥 FURS → ZZZS (Walk)
+              </a>
+
+              <a class="btn" target="_blank"
+                 href="https://www.google.com/maps/dir/?api=1&origin=ZZZS%20Maribor%2C%20Ulica%20Talcev%209%2C%202000%20Maribor&destination=%C5%A0tudentski%20servis%20Maribor%2C%20Gosposvetska%20cesta%2083%2C%202000%20Maribor&travelmode=walking">
+                 💼 ZZZS → Student Service (Walk)
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="card">
+        <h2>🧾 Personal Checklist (Tick & Track)</h2>
+        <p class="muted">Your progress is saved automatically in this browser.</p>
+
+        <div class="checklist">
+          <div class="item">
+            <input type="checkbox" id="c1"/>
+            <div>
+              <b>Address Registration (UE Maribor)</b>
+              <span>Bring: Passport + Visa + Rent agreement (original)</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c2"/>
+            <div>
+              <b>University Enrollment</b>
+              <span>Get: Enrollment certificate (Potrdilo o vpisu)</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c3"/>
+            <div>
+              <b>BONI Activation (ŠOUM)</b>
+              <span>Possible after enrollment certificate ✅</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c4"/>
+            <div>
+              <b>Residence Permit + Biometrics</b>
+              <span>Bring address reg + enrollment + insurance + funds proof</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c5"/>
+            <div>
+              <b>Tax Number (FURS)</b>
+              <span>Needed for job/bank/salary</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c6"/>
+            <div>
+              <b>Health Insurance (ZZZS)</b>
+              <span>Make sure you have valid insurance confirmation</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c7"/>
+            <div>
+              <b>Bank Account (Optional)</b>
+              <span>NLB / OTP / SKB (any one)</span>
+            </div>
+          </div>
+
+          <div class="item">
+            <input type="checkbox" id="c8"/>
+            <div>
+              <b>Student Work Registration (Optional)</b>
+              <span>Študentski servis Maribor</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="small">
+          Quick carry list: <b>Passport</b>, <b>Visa stamp</b>, <b>Rent agreement</b>,
+          <b>Enrollment certificate</b>, <b>Insurance</b>, <b>Funds proof</b>,
+          plus copies/scans ✅
+        </p>
+      </aside>
+    </div>
+
+    <footer>
+      Made for Maribor 🇸🇮 — Good luck with your student life! ✅
+    </footer>
+  </div>
+
+  <script>
+    // Save checklist state to LocalStorage
+    const ids = ["c1","c2","c3","c4","c5","c6","c7","c8"];
+
+    function loadChecks(){
+      ids.forEach(id=>{
+        const saved = localStorage.getItem("maribor_"+id);
+        if(saved !== null){
+          document.getElementById(id).checked = (saved === "true");
+        }
+      });
+    }
+
+    function bindChecks(){
+      ids.forEach(id=>{
+        document.getElementById(id).addEventListener("change", (e)=>{
+          localStorage.setItem("maribor_"+id, e.target.checked);
+        });
+      });
+    }
+
+    function resetChecks(){
+      ids.forEach(id=>{
+        localStorage.removeItem("maribor_"+id);
+        document.getElementById(id).checked = false;
+      });
+      alert("Checklist reset ✅");
+    }
+
+    loadChecks();
+    bindChecks();
+  </script>
+</body>
+</html>
